@@ -1,12 +1,12 @@
 require "rails_helper"
 
-describe "Items API" do
+describe "GET /api/v1/items" do
   it "sends a list of all items" do
-    merchant_1 = Merchant.create!(name: "Paula Pounders")
+    merchant1 = Merchant.create!(name: "Paula Pounders")
     item1 = Item.create!( name: "Shampoo",
                           description: "Shampoo is better!",
                           unit_price: 4.20,
-                          merchant_id: merchant_1.id  )
+                          merchant_id: merchant1.id  )
   
     get "/api/v1/items"
     expect(response).to be_successful
@@ -26,19 +26,45 @@ describe "Items API" do
       expect(item[:attributes][:merchant_id]).to eq(item1.merchant_id)
     end
   end
+end
 
+describe "GET /api/v1/items/{item_id}" do
   it "sends one single item" do
-    merchant_1 = Merchant.create!(name: "Paula Pounders")
+    merchant1 = Merchant.create!(name: "Paula Pounders")
     item1 = Item.create!( name: "Shampoo",
                           description: "Shampoo is better!",
                           unit_price: 4.20,
-                          merchant_id: merchant_1.id  )
+                          merchant_id: merchant1.id  )
 
     get "/api/v1/items/#{item1.id}"
     expect(response).to be_successful
 
     item = JSON.parse(response.body, symbolize_names: true)
     expect(item[:data][:id].to_i).to eq(item1.id)    
+  end
+end
+
+describe "POST /api/v1/items" do
+  it "creates an item" do 
+    merchant1 = Merchant.create!(name: "Paula Pounders")
+
+    item_params = {
+      name: "Used Shirt",
+      description: "Couple holes and stains, but smells not the worst",
+      unit_price: 6.99,
+      merchant_id: merchant1.id
+    }
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+    
+    created_item = Item.last
+
+    expect(response).to be_successful
+    expect(item_params[:name]).to eq(created_item[:name])
+    expect(item_params[:description]).to eq(created_item[:description])
+    expect(item_params[:unit_price]).to eq(created_item[:unit_price])
+    expect(item_params[:merchant_id]).to eq(created_item[:merchant_id])
   end
 end
 
