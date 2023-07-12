@@ -48,17 +48,23 @@ describe "POST /api/v1/items" do
   it "creates an item" do 
     merchant1 = Merchant.create!(name: "Paula Pounders")
 
-    post "/api/v1/items", params: {
+    item_params = {
       name: "Used Shirt",
       description: "Couple holes and stains, but smells not the worst",
       unit_price: 6.99,
       merchant_id: merchant1.id
     }
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+    
+    created_item = Item.last
+
     expect(response).to be_successful
-
-    item = JSON.parse(response.body, symbolize_names: true)
-
-    # require 'pry'; binding.pry
+    expect(item_params[:name]).to eq(created_item[:name])
+    expect(item_params[:description]).to eq(created_item[:description])
+    expect(item_params[:unit_price]).to eq(created_item[:unit_price])
+    expect(item_params[:merchant_id]).to eq(created_item[:merchant_id])
   end
 end
 
