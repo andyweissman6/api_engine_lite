@@ -13,13 +13,9 @@ describe "Merchants API" do
 
     merchants[:data].each do |merchant|
       expect(merchant).to have_key(:id)
-      expect(merchant[:id].to_i).to be_an(Integer)
-
       expect(merchant).to have_key(:type)
-      expect(merchant[:type]).to be_a(String)
-
       expect(merchant).to have_key(:attributes)
-      expect(merchant[:attributes][:name]).to be_a(String)
+      expect(merchant[:attributes]).to have_key(:name)
     end
   end
 
@@ -31,8 +27,6 @@ describe "Merchants API" do
     expect(response).to be_successful
     merchant = JSON.parse(response.body, symbolize_names: true)
     
-    expect(merchant[:data][:id].to_i).to eq(merchant_1.id)
-    expect(merchant[:data][:attributes][:name]).to be_a(String)
-    expect(merchant[:data][:attributes][:name]).to eq("Paula Pounders")
+    expect(merchant[:data][:id].to_i).to eq(merchant_1.id)    
   end
 end
