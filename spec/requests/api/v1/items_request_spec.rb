@@ -1,12 +1,12 @@
 require "rails_helper"
 
-describe "Items API" do
+describe "GET /api/v1/items" do
   it "sends a list of all items" do
-    merchant_1 = Merchant.create!(name: "Paula Pounders")
+    merchant1 = Merchant.create!(name: "Paula Pounders")
     item1 = Item.create!( name: "Shampoo",
                           description: "Shampoo is better!",
                           unit_price: 4.20,
-                          merchant_id: merchant_1.id  )
+                          merchant_id: merchant1.id  )
   
     get "/api/v1/items"
     expect(response).to be_successful
@@ -26,19 +26,39 @@ describe "Items API" do
       expect(item[:attributes][:merchant_id]).to eq(item1.merchant_id)
     end
   end
+end
 
+describe "GET /api/v1/items/{item_id}" do
   it "sends one single item" do
-    merchant_1 = Merchant.create!(name: "Paula Pounders")
+    merchant1 = Merchant.create!(name: "Paula Pounders")
     item1 = Item.create!( name: "Shampoo",
                           description: "Shampoo is better!",
                           unit_price: 4.20,
-                          merchant_id: merchant_1.id  )
+                          merchant_id: merchant1.id  )
 
     get "/api/v1/items/#{item1.id}"
     expect(response).to be_successful
 
     item = JSON.parse(response.body, symbolize_names: true)
     expect(item[:data][:id].to_i).to eq(item1.id)    
+  end
+end
+
+describe "POST /api/v1/items" do
+  it "creates an item" do 
+    merchant1 = Merchant.create!(name: "Paula Pounders")
+
+    post "/api/v1/items", params: {
+      name: "Used Shirt",
+      description: "Couple holes and stains, but smells not the worst",
+      unit_price: 6.99,
+      merchant_id: merchant1.id
+    }
+    expect(response).to be_successful
+
+    item = JSON.parse(response.body, symbolize_names: true)
+
+    # require 'pry'; binding.pry
   end
 end
 
