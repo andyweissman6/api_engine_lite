@@ -26,6 +26,20 @@ describe "Items API" do
       expect(item[:attributes][:merchant_id]).to eq(item1.merchant_id)
     end
   end
+
+  it "sends one single item" do
+    merchant_1 = Merchant.create!(name: "Paula Pounders")
+    item1 = Item.create!( name: "Shampoo",
+                          description: "Shampoo is better!",
+                          unit_price: 4.20,
+                          merchant_id: merchant_1.id  )
+
+    get "/api/v1/items/#{item1.id}"
+    expect(response).to be_successful
+
+    item = JSON.parse(response.body, symbolize_names: true)
+    expect(item[:data][:id].to_i).to eq(item1.id)    
+  end
 end
 
     
