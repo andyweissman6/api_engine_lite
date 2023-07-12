@@ -193,6 +193,7 @@
       "/Users/andyweissman/3mod/engine_lite/app/models/merchant.rb": {
         "lines": [
           1,
+          null,
           1,
           null
         ]
@@ -207,6 +208,10 @@
       "/Users/andyweissman/3mod/engine_lite/app/models/item.rb": {
         "lines": [
           1,
+          null,
+          null,
+          null,
+          null,
           1,
           null
         ]
@@ -216,6 +221,7 @@
           1,
           1,
           1,
+          null,
           null,
           null
         ]
@@ -231,10 +237,12 @@
           1,
           1,
           1,
+          null,
+          null,
           null
         ]
       }
     },
-    "timestamp": 1689124291
+    "timestamp": 1689127223
   }
 }
