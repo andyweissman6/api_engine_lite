@@ -45,7 +45,7 @@ describe "GET /api/v1/items/{item_id}" do
 end
 
 describe "POST /api/v1/items" do
-  it "creates an item" do 
+  it "CREATES an item" do 
     merchant1 = Merchant.create!(name: "Paula Pounders")
 
     item_params = {
@@ -67,5 +67,12 @@ describe "POST /api/v1/items" do
     expect(item_params[:merchant_id]).to eq(created_item[:merchant_id])
   end
 end
+
+# describe "POST /api/v1/items" do
+#   it "UPDATES an item" do 
+#     id = create(:item).id
+#     previous_name = 
+#   end
+# end
 
     
