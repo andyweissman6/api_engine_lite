@@ -91,4 +91,22 @@ describe "PATCH /api/v1/items (UPDATE Item)" do
   end
 end
 
-    
+describe "DELETE /api/v1/items (DELETE Item)" do
+  before :each do
+    @merchant1 = Merchant.create!(name: "Paula Pounders")
+    @item1 = Item.create!( name: "Shampoo",
+                          description: "Shampoo is better!",
+                          unit_price: 4.20,
+                          merchant_id: @merchant1.id  )
+  end
+
+  it "deletes an item" do 
+    expect(Item.count).to eq(1)
+
+    delete "/api/v1/items/#{@item1.id}"
+
+    expect(response).to be_successful
+    expect(Item.count).to eq(0)
+    expect{Item.find(@item1.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+end
