@@ -8,7 +8,21 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def create
-    render json: ItemSerializer.new(Item.create(item_params)), status: :created
+    @item = Item.new(item_params)
+    if @item.save
+      render json: ItemSerializer.new(Item.create(item_params)), status: :created
+    else 
+      render json: { error: @item.errors.full_messages }, status: 400
+    end
+  end
+
+  def update
+    @item = Item.find(params[:id].to_i)
+    if @item.update(item_params)
+      render json: ItemSerializer.new(@item)
+    else
+      render json: { error: @item.errors.full_messages }, status: 400
+    end
   end
 
   private
