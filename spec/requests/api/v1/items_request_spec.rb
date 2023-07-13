@@ -68,11 +68,27 @@ describe "POST /api/v1/items" do
   end
 end
 
-# describe "POST /api/v1/items" do
-#   it "UPDATES an item" do 
-#     id = create(:item).id
-#     previous_name = 
-#   end
-# end
+describe "PATCH /api/v1/items (UPDATE Item)" do
+  before :each do
+    @merchant1 = Merchant.create!(name: "Paula Pounders")
+    @item1 = Item.create!( name: "Shampoo",
+                          description: "Shampoo is better!",
+                          unit_price: 4.20,
+                          merchant_id: @merchant1.id  )
+  end
+
+  it "updates an item" do 
+    previous_name = @item1.name
+    item_params = { item: { name: "Shampoopsicle" } }
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    patch "/api/v1/items/#{@item1.id}", headers: headers, params: JSON.generate(item_params)
+    item = Item.find_by(id: @item1.id)
+    
+    expect(response).to be_successful
+    expect(item.name).to_not eq(previous_name)
+    expect(item.name).to eq("Shampoopsicle")
+  end
+end
 
     
